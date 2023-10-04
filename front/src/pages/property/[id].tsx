@@ -53,7 +53,7 @@ export default PropertyDetailPage;
 
 
 // Esta função é usada para gerar as páginas dinâmicas com base no ID da propriedade
-export async function getServerSideProps(context) {
+export async function getServerSideProps(context: { query: { id: any; }; }) {
   const { id } = context.query;
     const property = properties.find((property) => property.id === parseInt(id));
     console.log(id)
