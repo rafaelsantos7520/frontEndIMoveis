@@ -8,19 +8,19 @@ const Register = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleNameChange = (e) => {
+  const handleNameChange = (e: { target: { value: React.SetStateAction<string>; }; }) => {
     setName(e.target.value);
   };
 
-  const handleEmailChange = (e) => {
+  const handleEmailChange = (e: { target: { value: React.SetStateAction<string>; }; }) => {
     setEmail(e.target.value);
   };
 
-  const handlePasswordChange = (e) => {
+  const handlePasswordChange = (e: { target: { value: React.SetStateAction<string>; }; }) => {
     setPassword(e.target.value);
   };
 
-  const handleRegister = (e) => {
+  const handleRegister = (e: { preventDefault: () => void; }) => {
     e.preventDefault();
   };
 
