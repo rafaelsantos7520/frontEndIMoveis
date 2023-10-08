@@ -10,7 +10,7 @@ const Footer = () => {
           <a href="#" className="mr-3 md:mr-6 text-xl"><FaInstagram /></a>
         </div>
         <div className="mt-4 md:mt-0 text-xs">
-          © 2023 Andréia Corretora. Todos os direitos reservados.
+          © 2023 Andréa Corretora. Todos os direitos reservados.
         </div>
       </div>
     </footer>

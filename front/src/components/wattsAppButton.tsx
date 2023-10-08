@@ -16,7 +16,7 @@ const WhatsAppButton: React.FC <WattsAppButtonProps> = ({ phoneNumber }) => {
       className="fixed bottom-4 right-4 bg-green-500 text-white p-2 rounded-full cursor-pointer hover:bg-green-600 transition-colors z-50"
       onClick={handleClick}
     >
-      <FaWhatsapp className="text-2xl md:text-4x1" />
+      <FaWhatsapp className="text-4xl md:text-4x1" />
     </div>
   );
 };
