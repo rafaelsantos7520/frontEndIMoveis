@@ -1,25 +1,69 @@
 import Footer from "@/components/Footer";
+import "react-toastify/dist/ReactToastify.css";
 import Header from "@/components/Header";
+import { Button } from "@nextui-org/react";
 import Link from "next/link";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { FaUser, FaLock } from "react-icons/fa";
+import { ToastContainer, toast } from "react-toastify";
+import { UserContext } from "@/contexts/userContext";
+
 
 const Login = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [formData, setFormData] = useState({
+    email: '',
+    password: '',
+  });
 
-  const handleEmailChange = (e: { target: { value: React.SetStateAction<string>; }; }) => {
-    setEmail(e.target.value);
+  const { loginUser, loading, user } = useContext(UserContext);
+  console.log(user)
+
+  const [errors, setErrors] = useState({
+    email: false,
+    password: false,
+  });
+
+  const handleFormEdit = (event: React.ChangeEvent<HTMLInputElement>, name: string) => {
+    setFormData({
+      ...formData,
+      [name]: event.target.value,
+    });
+
+    setErrors({
+      ...errors,
+      [name]: false,
+    });
   };
 
-  const handlePasswordChange = (e: { target: { value: React.SetStateAction<string>; }; }) => {
-    setPassword(e.target.value);
+  const handleLogin = async (event: { preventDefault: () => void; }) => {
+    event.preventDefault();
+
+    let formValid = true;
+    const newErrors = { ...errors };
+
+    if (formData.email === '') {
+      formValid = false;
+      newErrors.email = true;
+    }
+
+    if (formData.password === '') {
+      formValid = false;
+      newErrors.password = true;
+    }
+
+    if (!formValid) {
+      setErrors(newErrors);
+      return;
+    }
+
+
+    loginUser(formData)
+    setFormData({
+      email: '',
+      password: '',
+    });
   };
 
-  const handleLogin = (e: { preventDefault: () => void; }) => {
-    e.preventDefault();
-    // Lógica de login aqui, por exemplo, enviar solicitação para um servidor
-  };
 
   return (
     <>
@@ -47,13 +91,19 @@ const Login = () => {
                   type="email"
                   autoComplete="email"
                   required
-                  value={email}
-                  onChange={handleEmailChange}
-                  className="w-full px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-600 pl-10"
+                  value={formData.email}
+                  onChange={(e) => handleFormEdit(e, 'email')}
+                  className={`w-full px-4 py-2 rounded-md border ${errors.email ? 'border-red-500' : 'border-gray-300'
+                    } focus:outline-none focus:ring-2 focus:ring-purple-600 pl-10`}
                   placeholder="Seu e-mail"
                 />
                 <FaUser className="absolute text-gray-500 left-3 top-3" />
               </div>
+              {errors.email && (
+                <p className="text-red-500 text-xs mt-1">
+                  O e-mail é obrigatório.
+                </p>
+              )}
             </div>
             <div className="mb-4">
               <label
@@ -69,21 +119,24 @@ const Login = () => {
                   type="password"
                   autoComplete="current-password"
                   required
-                  value={password}
-                  onChange={handlePasswordChange}
-                  className="w-full px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-600 pl-10"
+                  value={formData.password}
+                  onChange={(e) => handleFormEdit(e, 'password')}
+                  className={`w-full px-4 py-2 rounded-md border ${errors.password ? 'border-red-500' : 'border-gray-300'
+                    } focus:outline-none focus:ring-2 focus:ring-purple-600 pl-10`}
                   placeholder="Sua senha"
                 />
                 <FaLock className="absolute text-gray-500 left-3 top-3" />
               </div>
+              {errors.password && (
+                <p className="text-red-500 text-xs mt-1">
+                  campo obrigatorio
+                </p>
+              )}
             </div>
             <div className="text-center">
-              <button
-                type="submit"
-                className="w-full py-2 px-4 text-white font-semibold bg-blue-500 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400"
-              >
-                Entrar
-              </button>
+              <Button color="primary" radius="md" fullWidth={true} type="submit">
+                Login
+              </Button>
             </div>
           </form>
           <div className="mt-4 text-md md:text-lg text-center">
@@ -96,6 +149,7 @@ const Login = () => {
           </div>
         </div>
       </div>
+      <ToastContainer />
     </>
   );
 };

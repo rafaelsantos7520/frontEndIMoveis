@@ -10,5 +10,10 @@ export const loginSchema = userSchema.omit({
   name: true,
 });
 
-export type UserData = z.infer<typeof userSchema>;
+export const userResponseSchema = userSchema.omit({
+  password: true,
+});
+
+export type UseResponseData = z.infer<typeof userSchema>;
+export type UseRequestData = z.infer<typeof userSchema>;
 export type LoginData = z.infer<typeof loginSchema>;

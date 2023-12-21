@@ -1,38 +1,68 @@
-import Link from 'next/link';
-import { useRouter } from 'next/router';
-import React from 'react';
-import Image from 'next/image';
+import React, { useContext, useEffect, useState } from "react";
+import { Navbar, NavbarBrand, NavbarContent, NavbarItem, Link, Button } from "@nextui-org/react";
+import { UserContext } from "@/contexts/userContext";
 
-const Header = () => {
-  const router = useRouter();
-  const isLoginPage = router.pathname === '/login';
+export default function App() {
+  const { user } = useContext(UserContext);
+  const [isLoggedIn, setIsLoggedIn] = useState(!!user);
+
+
+  useEffect(() => {
+    setIsLoggedIn(!!user);
+  }, [user]);
+
+  const handleLogout = async () => {
+    localStorage.clear();
+    setIsLoggedIn(false);
+  };
 
   return (
-    <header className="h-20  border py-1 p-2 shadow-md">
-      <div className="container mx-auto flex  justify-between items-center">
-        {/* <Image
-          src={"/assets/Andreia.png"}
-          alt={"logo image"}
-          width={100}
-          height={100}
-          style={{
-              width: "auto",
-              height: "auto",
-                    }}
-        /> */}
-        <h1 className="text-md md:text-3xl font-bold">Andrea Gomes</h1>
-        <nav className="flex flex-wrap gap-4">
-          {!isLoginPage && ( // Renderize o botão de login somente se não estiver na página de login
-            <Link href="login" className="bg-transparent font-semibold p-2 rounded-md hover:underline underline-offset-4">Login</Link>
+    <>
+      <Navbar className="shadow" >
+        <NavbarBrand>
+          <p className="font-bold text-inherit">ACME</p>
+        </NavbarBrand>
+        <NavbarContent className="hidden sm:flex gap-4" justify="center">
+          {!isLoggedIn ? null : (
+            <>
+              <NavbarItem >
+                <Link href="#" aria-current="page">
+                  Contato
+                </Link>
+              </NavbarItem>
+              <NavbarItem >
+                <Link href="/criarPoster" aria-current="page">
+                  Novo anuncio
+                </Link>
+              </NavbarItem>
+            </>
           )}
-          <Link href="/" className="bg-transparent font-semibold p-2 rounded-md hover:underline underline-offset-4">Home</Link>
-        </nav>
-      </div>
-    </header>
+        </NavbarContent>
+        <NavbarContent justify="end">
+          {!isLoggedIn ? (
+            <>
+              <NavbarItem className="hidden lg:flex">
+                <Button as={Link} color="primary" variant="flat" href="/login">Login</Button>
+              </NavbarItem>
+              <NavbarItem>
+                <Button as={Link} color="primary" href="/register" variant="flat">
+                  Cadastro
+                </Button>
+              </NavbarItem>
+            </>
+          ) : (
+            <>
+              <NavbarItem>
+                <Button color="danger" onClick={handleLogout} variant="flat">
+                  Logout
+                </Button>
+              </NavbarItem>
+              <NavbarItem>
+              </NavbarItem>
+            </>
+          )}
+        </NavbarContent>
+      </Navbar>
+    </>
   );
-};
-
-export default Header;
-
-
-
+}

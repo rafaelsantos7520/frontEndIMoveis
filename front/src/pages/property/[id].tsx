@@ -70,3 +70,4 @@ export async function getServerSideProps(context: { query: { id: any; }; }) {
     },
   };
 }
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 
